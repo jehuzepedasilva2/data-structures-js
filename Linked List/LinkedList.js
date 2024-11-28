@@ -1,10 +1,13 @@
 import Node from "./Node.js"
 
-const LinkedList = {
+const privateVars = {
   head: null,
   tail: null, 
-  size: 0,
   inList: new Set(),
+  size: 0,
+};
+
+const LinkedList = {
   append, 
   prepend,
   at, 
@@ -14,73 +17,74 @@ const LinkedList = {
   toString,
   insertAt,
   removeAt,
-}
+  size,
+};
 
 function removeAt(index) {
-  if (index == LinkedList.size-1) {
+  if (index == privateVars.size-1) {
     pop();
-  } else if (index < 0 || index >= LinkedList.size) {
+  } else if (index < 0 || index >= privateVars.size) {
     throw new Error('index out of range');
   } else if (index === 0) {
-    LinkedList.inList.delete(LinkedList.head.value);
-    LinkedList.head = LinkedList.head.nextNode;
-    LinkedList.size--;
+    privateVars.inList.delete(privateVars.head.value);
+    privateVars.head = privateVars.head.nextNode;
+    privateVars.size--;
   } else {
     const prev = at(index-1);
     const oldVal = prev.nextNode.value;
     const after = at(index+1);
     prev.nextNode = after;
-    LinkedList.size--;
-    LinkedList.inList.delete(oldVal);
+    privateVars.size--;
+    privateVars.inList.delete(oldVal);
   }
 }
 
 function insertAt(value, index) {
-  if (index == LinkedList.size) {
+  if (index == privateVars.size) {
     append(value);
   } else if (index === 0) {
     prepend(value);
-  } else if (index > LinkedList.size || index < 0) {
+  } else if (index > privateVars.size || index < 0) {
     throw new Error('index out of range');
   } else {
     let prev = at(index-1);
     let curr = prev.nextNode;
     prev.nextNode = {...Node, value, nextNode: curr};
-    LinkedList.size++;
-    LinkedList.inList.add(value);
+    privateVars.size++;
+    privateVars.inList.add(value);
   }
 }
 
 function append(value) {
   const newNode = { ...Node, value, nextNode: null }; //spreads properties of Node to new object
-  if (LinkedList.head === null) {
-    LinkedList.head = newNode;
-    LinkedList.tail = newNode;
+  if (privateVars.head === null) {
+    privateVars.head = newNode;
+    privateVars.tail = newNode;
   } else {
-    LinkedList.tail.nextNode = newNode;
-    LinkedList.tail = newNode;
+    privateVars.tail.nextNode = newNode;
+    privateVars.tail = newNode;
   }
-  LinkedList.size++;
-  LinkedList.inList.add(value);
+  privateVars.size++;
+  privateVars.inList.add(value);
 }
 
 function prepend(value) {
-  if (LinkedList.head === null) {
+  if (privateVars.head === null) {
     append(value);
     return;
   }
-  const newNode = { ...Node, value, nextNode: LinkedList.head};
-  LinkedList.head = newNode;
-  LinkedList.size++;
-  LinkedList.inList.add(value);
+  const newNode = { ...Node, value, nextNode: privateVars.head};
+  privateVars.head = newNode;
+  privateVars.size++;
+  privateVars.inList.add(value);
 }
 
 function at(index) {
-  if (index >= LinkedList.size || index < 0) {
+  if (index >= privateVars.size || index < 0) {
     return null;
   }
 
-  let list = LinkedList.head;
+  let list = privateVars.head;
   while (index > 0) {
     list = list.nextNode;
     index--;
@@ -89,34 +93,28 @@ function at(index) {
 }
 
 function pop() {
-  if (LinkedList.size === 0) {
+  if (privateVars.size === 0) {
     throw new Error('attempting to pop from an empty list');
   }
-
-  let list = LinkedList.head;
-  let i = LinkedList.size-1;
-  while (i > 1) {
-    list = list.nextNode;
-    i--;
-  }
-  const last = LinkedList.tail;
-  LinkedList.tail = list;
-  list.nextNode = null;
-  LinkedList.size--;
-  LinkedList.inList.delete(last.value);
+  const last = privateVars.tail;
+  const secondLast = at(privateVars.size-2);
+  privateVars.tail = secondLast;
+  secondLast.nextNode = null;
+  privateVars.size--;
+  privateVars.inList.delete(last.value);
   return last.value;
 }
 
 function contains(value) {
-  return LinkedList.inList.has(value);
+  return privateVars.inList.has(value);
 }
 
 function find(value) {
-  if (!LinkedList.inList.has(value)) {
-    throw new Error(`${value} not in list`);
+  if (!privateVars.inList.has(value)) {
+    return -1;
   }
   let index = 0;
-  let list = LinkedList.head;
+  let list = privateVars.head;
   while (list !== null && list.value !== value) {
     list = list.nextNode;
     index++;
@@ -125,13 +123,21 @@ function find(value) {
 }
 
 function toString() {
-  let list = LinkedList.head, st = '';
+  if (privateVars.size <= 0) {
+    return '';
+  }
+
+  let list = privateVars.head, st = '';
   while (list.nextNode !== null) {
     st += `(${list.value}) -> `;
     list = list.nextNode;
   }
   st += `(${list.value})`;
   return st;
+}
+
+function size() {
+  return privateVars.size;
 }
 
 export default LinkedList;

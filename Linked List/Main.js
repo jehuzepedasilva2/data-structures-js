@@ -8,25 +8,25 @@ for (let i = 1; i <= 10; i++) {
 console.log('-----------TEST size START-------------');
 
 console.log(LinkedList.toString());
-console.log(`Size: ${LinkedList.size}`);
+console.log(`Size: ${LinkedList.size()}`);
 
 
 console.log('-----------TEST at--------------');
 
-for (let i = 0; i < LinkedList.size; i++) {
+for (let i = 0; i < LinkedList.size(); i++) {
   console.log(`${i+1} at  index: ${LinkedList.at(i).value}`);
 }
 
 console.log('-----------TEST removeAt--------------');
 
-for (let i = 0; i < LinkedList.size; i += 2) {
+for (let i = 0; i < LinkedList.size(); i += 2) {
   LinkedList.removeAt(i);
   console.log(`remove at index: ${i}: ${LinkedList.toString()}`);
 }
 
 console.log('-----------TEST insertAt--------------');
 
-for (let i = 1; i < LinkedList.size; i += 2) {
+for (let i = 1; i < LinkedList.size(); i += 2) {
   LinkedList.insertAt(i, i);
   console.log(`insert at index: ${i}: ${LinkedList.toString()}`);
 
@@ -42,4 +42,4 @@ for (let i = 0; i < 3; i++) {
 console.log('-----------TEST size END--------------');
 
 console.log(LinkedList.toString());
-console.log(`Size: ${LinkedList.size}`);
+console.log(`Size: ${LinkedList.size()}`);
