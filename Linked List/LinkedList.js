@@ -89,10 +89,10 @@ function find(value) {
 function toString() {
   let list = LinkedList.head, st = '';
   while (list.nextNode !== null) {
-    st += `${list.value} -> `;
+    st += `(${list.value}) -> `;
     list = list.nextNode;
   }
-  st += `${list.value}`;
+  st += `(${list.value})`;
   return st;
 }
 
