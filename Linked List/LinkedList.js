@@ -12,6 +12,43 @@ const LinkedList = {
   contains,
   find,
   toString,
+  insertAt,
+  removeAt,
+}
+
+function removeAt(index) {
+  if (index == LinkedList.size-1) {
+    pop();
+  } else if (index < 0 || index >= LinkedList.size) {
+    throw new Error('index out of range');
+  } else if (index === 0) {
+    LinkedList.inList.delete(LinkedList.head.value);
+    LinkedList.head = LinkedList.head.nextNode;
+    LinkedList.size--;
+  } else {
+    const prev = at(index-1);
+    const oldVal = prev.nextNode.value;
+    const after = at(index+1);
+    prev.nextNode = after;
+    LinkedList.size--;
+    LinkedList.inList.delete(oldVal);
+  }
+}
+
+function insertAt(value, index) {
+  if (index == LinkedList.size) {
+    append(value);
+  } else if (index === 0) {
+    prepend(value);
+  } else if (index > LinkedList.size || index < 0) {
+    throw new Error('index out of range');
+  } else {
+    let prev = at(index-1);
+    let curr = prev.nextNode;
+    prev.nextNode = {...Node, value, nextNode: curr};
+    LinkedList.size++;
+    LinkedList.inList.add(value);
+  }
 }
 
 function append(value) {
@@ -40,7 +77,7 @@ function prepend(value) {
 
 function at(index) {
   if (index >= LinkedList.size || index < 0) {
-    throw new Error('index out of range');
+    return null;
   }
 
   let list = LinkedList.head;
@@ -66,6 +103,7 @@ function pop() {
   LinkedList.tail = list;
   list.nextNode = null;
   LinkedList.size--;
+  LinkedList.inList.delete(last.value);
   return last.value;
 }
 
