@@ -3,18 +3,15 @@ import Node from './Node.js';
 export default class Tree {
 
   #root;
-  #size;
   #identityFunction;
 
   constructor() {
     this.#root = null;
-    this.#size = 0;
     this.#identityFunction = (val) => val;
   }
 
   #insertHelper(root, value) {
     if (root === null) {
-      this.#size++;
       return new Node(value);
     }
     if (value < root.value) {
@@ -99,6 +96,9 @@ export default class Tree {
   }
   
   deleteItem(value) {
+    if (this.find(value) === null) {
+      return null;
+    }
     this.#root = this.#deleteItemHelper(this.#root, value);
     if (!this.isBalanced()) {
       this.rebalance();
