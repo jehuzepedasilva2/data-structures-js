@@ -47,7 +47,7 @@ export default class Tree {
   
     // Case 2: If no right child, find the lowest ancestor for which the node is in the left subtree
     let successor = null;
-    let current = this.#root; // Assuming `#root` is the root of the tree
+    let current = this.#root;
     while (current) {
       if (node.value < current.value) {
         successor = current;
